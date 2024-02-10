@@ -1,6 +1,6 @@
 'use client';
 
-import type {Prediction} from "@/types";
+import type { Prediction } from "@/types";
 
 import { useFormState, useFormStatus } from "react-dom";
 
@@ -17,23 +17,23 @@ function FormContent() {
 
   return (
     <>
-    {pending ? <Skeleton className="h-[480px] w-[512px]" /> : null}
+      {pending ? <Skeleton className="h-[480px] w-[512px]" /> : null}
       <Input
         defaultValue="https://replicate.delivery/pbxt/IJZOELWrncBcjdE1s5Ko8ou35ZOxjNxDqMf0BhoRUAtv76u4/room.png"
         name="image"
         placeholder="https://replicate.delivery/pbxt/IJZOELWrncBcjdE1s5Ko8ou35ZOxjNxDqMf0BhoRUAtv76u4/room.png"
-        type="text"
+        type="file"
       />
       <Textarea name="prompt" placeholder="An industrial bedroom" />
-      <Button>Create</Button>
+      <Button disabled={pending}>Create</Button>
     </>
   );
 }
 
 export default function HomePage() {
-  const [state, formAction] = useFormState(handleSubmit, null)
+  const [state, formAction] = useFormState(handleSubmit, null);
 
-  async function handleSubmit(_state: Prediction, formData: FormData) {
+  async function handleSubmit(_state: null | Prediction, formData: FormData) {
     let prediction = await createPrediction(formData);
 
     while (["starting", "processing"].includes(prediction.status)) {
@@ -48,7 +48,7 @@ export default function HomePage() {
   return (
     <section className="grid gap-4 max-w-[512px] m-auto">
       {state?.output ? <img alt="Render preview" src={state.output[1]} /> : null}
-      <form action={formAction} className="gap-4 m-auto">
+      <form action={formAction} className="gap-4 grid">
         <FormContent />
     </form>
     </section>
